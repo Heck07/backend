@@ -1,9 +1,14 @@
 const express = require('express');
 const mysql = require('mysql2');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'http://localhost:8080', // Permet les requêtes venant de ton frontend en local
+}));
 
 // Connexion à la base de données
 const db = mysql.createConnection({
