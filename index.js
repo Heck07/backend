@@ -1,35 +1,26 @@
+// index.js à la racine de votre backend
 const express = require('express');
-const mysql = require('mysql2');
-const cors = require('cors');
-require('dotenv').config();
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const db = require('./config/database');
+const routes = require('./routes'); // Ce fichier routes est l'index.js du dossier routes
 
+dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: 'http://localhost:8080', // Permet les requêtes venant de ton frontend en local
-}));
-
-// Connexion à la base de données
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
-});
+app.use(bodyParser.json()); // Pour parser les requêtes JSON
+app.use('/routes', routes); // Enregistre les routes avec le préfixe /api
 
 db.connect((err) => {
   if (err) {
     console.error('Erreur de connexion à la base de données :', err);
-    return;
+    throw err;
   }
   console.log('Connecté à la base de données MySQL');
 });
 
-app.get('/', (req, res) => {
-  res.send('API Backend is running');
-});
-
+// Démarrage du serveur
 app.listen(port, () => {
   console.log(`Serveur backend en écoute sur le port ${port}`);
 });
