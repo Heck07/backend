@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware CORS pour autoriser les requêtes cross-origin
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://votre-domaine.com'], // Autorisez ici les origines dont vous avez besoin
+  origin: ['http://localhost:8080'], // Autorisez ici les origines dont vous avez besoin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
