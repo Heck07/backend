@@ -70,18 +70,9 @@ const createTables = () => {
       name VARCHAR(255) NOT NULL,
       price DECIMAL(10, 2) NOT NULL,
       description TEXT,
-      category_id INT,
+      category TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-    )
-  `;
-
-  const categoriesTable = `
-    CREATE TABLE IF NOT EXISTS categories (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      description TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `;
 
@@ -127,7 +118,6 @@ const createTables = () => {
   // Exécuter les requêtes de création de tables
   const tables = [
     usersTable,
-    categoriesTable,
     productsTable,
     ordersTable,
     purchasesTable,

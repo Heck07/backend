@@ -63,3 +63,16 @@ exports.deleteProduct = (req, res) => {
     res.status(200).send('Produit supprimé avec succès.');
   });
 };
+
+// Récupérer les produits par ID de catégorie
+exports.getProductsByCategory = (req, res) => {
+  const categoryId = req.params.categoryId;
+  const query = 'SELECT * FROM products WHERE category_id = ?';
+  db.query(query, [categoryId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des produits par catégorie :', err);
+      return res.status(500).send('Erreur interne lors de la récupération des produits par catégorie.');
+    }
+    res.status(200).json(results);
+  });
+};

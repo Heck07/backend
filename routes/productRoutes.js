@@ -15,4 +15,6 @@ router.put('/:id', roleMiddleware('admin'), productController.updateProduct);
 // Supprimer un produit
 router.delete('/:id', roleMiddleware('admin'), productController.deleteProduct);
 
+router.get('/category/:categoryId', productController.getProductsByCategory);
+
 module.exports = router;
