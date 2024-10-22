@@ -1,7 +1,7 @@
 // authController.js
 const db = require('../config/database'); // Importer la connexion à la base de données
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const generateToken = require('../utils/generateTokens');
 
 // Inscription d'un utilisateur
 exports.register = async (req, res) => {
@@ -55,9 +55,7 @@ exports.login = async (req, res) => {
     }
 
     // Générer un token
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: '24h', // Token expirera après 24 heures
-    });
+    const token = generateToken({ id: user.id, role: user.role });
 
     res.status(200).send({ auth: true, token });
   } catch (err) {
