@@ -63,3 +63,23 @@ exports.login = async (req, res) => {
     res.status(500).send('Erreur interne lors de la connexion.');
   }
 };
+
+exports.getUserDetails = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const [results] = await db.promise().query('SELECT * FROM users WHERE id = ?', [userId]);
+
+    if (results.length === 0) {
+      return res.status(404).send('Utilisateur non trouvé.');
+    }
+
+    const user = results[0];
+    delete user.password; // Supprimer le mot de passe avant de renvoyer les données
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Erreur lors de la récupération des informations utilisateur :', err);
+    res.status(500).send('Erreur interne lors de la récupération des informations utilisateur.');
+  }
+};
