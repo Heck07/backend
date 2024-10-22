@@ -76,3 +76,22 @@ exports.getProductsByCategory = (req, res) => {
     res.status(200).json(results);
   });
 };
+
+// Récupérer un produit par son ID
+exports.getProductById = (req, res) => {
+  const productId = req.params.id;
+  const query = 'SELECT * FROM products WHERE id = ?';
+
+  db.query(query, [productId], (err, result) => {
+    if (err) {
+      console.error('Erreur lors de la récupération du produit :', err);
+      return res.status(500).send('Erreur interne lors de la récupération du produit.');
+    }
+
+    if (result.length === 0) {
+      return res.status(404).send('Produit non trouvé.');
+    }
+
+    res.status(200).json(result[0]);
+  });
+};

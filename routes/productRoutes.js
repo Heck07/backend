@@ -17,4 +17,7 @@ router.delete('/:id', roleMiddleware('admin'), productController.deleteProduct);
 
 router.get('/category/:categoryId', productController.getProductsByCategory);
 
+router.get('/:id', productController.getProductById);
+
+
 module.exports = router;
