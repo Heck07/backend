@@ -15,7 +15,5 @@ router.get('/me', authenticateToken, userController.getUserDetails);
 
 router.put('/me', authenticateToken, userController.updateUserDetails);
 
-router.put('/me', authenticateToken, roleMiddleware('user'), userController.updateUser);
-
 
 module.exports = router;
