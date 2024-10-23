@@ -1,10 +1,7 @@
-// authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
-  console.log('Authorization Header:', authHeader); // Log pour vérifier l'en-tête d'authentification
-
   if (!authHeader) {
     return res.status(401).send('Accès refusé, jeton manquant');
   }
@@ -19,12 +16,10 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      console.error('Erreur lors de la vérification du token :', err);
       return res.status(403).send('Jeton invalide');
     }
-
-    console.log('Token décrypté avec succès :', user); // Ajouter ce log pour vérifier la valeur de `user`
-    req.user = user; // Stocke les informations du token décodé dans la requête
+    
+    req.user = user; // Stocke les informations du jeton déchiffré dans la requête
     next();
   });
 }
