@@ -72,23 +72,16 @@ exports.getUserDetails = async (req, res) => {
 };
 
 
+// Mise à jour des informations de l'utilisateur
 exports.updateUserDetails = async (req, res) => {
   try {
     const userId = req.user.id; // Utilisateur récupéré à partir du token
-    const { email, currentPassword, newPassword } = req.body;
+    const { email, newPassword } = req.body;
 
     // Vérifier si l'utilisateur existe
     const [userResults] = await db.promise().query('SELECT * FROM users WHERE id = ?', [userId]);
     if (userResults.length === 0) {
       return res.status(404).send('Utilisateur non trouvé.');
-    }
-
-    const user = userResults[0];
-
-    // Vérifier le mot de passe actuel
-    const passwordIsValid = await bcrypt.compare(currentPassword, user.password);
-    if (!passwordIsValid) {
-      return res.status(401).send('Mot de passe actuel incorrect.');
     }
 
     // Mettre à jour l'email et/ou le mot de passe
@@ -111,3 +104,4 @@ exports.updateUserDetails = async (req, res) => {
     res.status(500).send('Erreur interne lors de la mise à jour des informations.');
   }
 };
+
