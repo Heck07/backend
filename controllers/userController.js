@@ -53,7 +53,7 @@ exports.deleteUser = (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id; // Utiliser l'ID stocké par le middleware `authenticateToken`
 
     const [results] = await db.promise().query('SELECT * FROM users WHERE id = ?', [userId]);
 
@@ -71,7 +71,7 @@ exports.getUserDetails = async (req, res) => {
   }
 };
 
-// Mise à jour des informations de l'utilisateur
+
 exports.updateUserDetails = async (req, res) => {
   try {
     const userId = req.user.id; // Utilisateur récupéré à partir du token

@@ -16,10 +16,11 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
+      console.error('Erreur de vérification du token:', err); // Ajout de logs pour identifier les erreurs
       return res.status(403).send('Jeton invalide');
     }
     
-    req.user = user; // Stocke les informations du jeton déchiffré dans la requête
+    req.user = user; // Stocke les informations du token décodé
     next();
   });
 }
