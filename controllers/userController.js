@@ -72,36 +72,27 @@ exports.getUserDetails = async (req, res) => {
 };
 
 
-// Mise à jour des informations de l'utilisateur
-exports.updateUserDetails = async (req, res) => {
+// Mise à jour du mot de passe de l'utilisateur
+exports.updateUserPassword = async (req, res) => {
   try {
-    const userId = req.user.id; // Utilisateur récupéré à partir du token
-    const { email, newPassword } = req.body;
+    const userId = req.user.id; // L'utilisateur est extrait du token JWT
+    const { newPassword } = req.body;
 
-    // Vérifier si l'utilisateur existe
-    const [userResults] = await db.promise().query('SELECT * FROM users WHERE id = ?', [userId]);
-    if (userResults.length === 0) {
-      return res.status(404).send('Utilisateur non trouvé.');
+    if (!newPassword) {
+      return res.status(400).send('Le nouveau mot de passe est requis.');
     }
 
-    // Mettre à jour l'email et/ou le mot de passe
-    let updateQuery = 'UPDATE users SET email = ?';
-    let queryParams = [email];
+    // Hasher le nouveau mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    if (newPassword) {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      updateQuery += ', password = ?';
-      queryParams.push(hashedPassword);
-    }
+    // Mettre à jour le mot de passe dans la base de données
+    const updateQuery = 'UPDATE users SET password = ? WHERE id = ?';
+    await db.promise().query(updateQuery, [hashedPassword, userId]);
 
-    updateQuery += ' WHERE id = ?';
-    queryParams.push(userId);
-
-    await db.promise().query(updateQuery, queryParams);
-    res.status(200).send('Informations mises à jour avec succès.');
+    res.status(200).send('Mot de passe mis à jour avec succès.');
   } catch (err) {
-    console.error('Erreur lors de la mise à jour des informations de l\'utilisateur :', err);
-    res.status(500).send('Erreur interne lors de la mise à jour des informations.');
+    console.error('Erreur lors de la mise à jour du mot de passe :', err);
+    res.status(500).send('Erreur interne lors de la mise à jour du mot de passe.');
   }
 };
 
