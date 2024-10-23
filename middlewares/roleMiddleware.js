@@ -4,8 +4,12 @@ const db = require('../config/database');
 // Middleware pour vérifier le rôle de l'utilisateur
 const roleMiddleware = (allowedRoles) => {
   return (req, res, next) => {
-    const userId = req.user.id; // Supposons que l'ID de l'utilisateur est extrait du token d'authentification
-    
+    if (!req.user || !req.user.id) {
+      return res.status(401).send('Accès refusé : utilisateur non authentifié.');
+    }
+
+    const userId = req.user.id;
+
     // Récupérer le rôle de l'utilisateur à partir de la base de données
     const query = 'SELECT role FROM users WHERE id = ?';
     db.query(query, [userId], (err, results) => {

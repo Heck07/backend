@@ -1,3 +1,4 @@
+// authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
@@ -14,12 +15,12 @@ function authenticateToken(req, res, next) {
 
   const token = tokenParts[1];
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
     if (err) {
       return res.status(403).send('Jeton invalide');
     }
-    
-    req.user = user; // Stocke les informations du jeton déchiffré dans la requête
+
+    req.user = decodedToken; // Stocke les informations du token décodé dans la requête
     next();
   });
 }
