@@ -11,9 +11,9 @@ router.get('/', roleMiddleware('admin'), userController.getAllUsers);
 // Mettre à jour un utilisateur
 router.put('/:id', roleMiddleware('admin'), userController.updateUser);
 
-router.get('/', authenticateToken, userController.getUserDetails);
+router.get('/me', authenticateToken, userController.getUserDetails);
 
-router.put('/', authenticateToken, userController.updateUserDetails);
+router.put('/me', authenticateToken, userController.updateUserDetails);
 
 
 module.exports = router;
