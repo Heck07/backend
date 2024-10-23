@@ -15,12 +15,12 @@ function authenticateToken(req, res, next) {
 
   const token = tokenParts[1];
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(403).send('Jeton invalide');
     }
 
-    req.user = decodedToken; // Stocke les informations du token décodé dans la requête
+    req.user = user; // Stocke les informations du token décodé dans la requête
     next();
   });
 }
