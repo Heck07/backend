@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
+  console.log('Authorization Header:', authHeader); // Log pour vérifier l'en-tête d'authentification
+
   if (!authHeader) {
     return res.status(401).send('Accès refusé, jeton manquant');
   }
