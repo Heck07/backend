@@ -3,13 +3,13 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 const authenticateToken = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 
-// Récupérer tous les utilisateurs
-router.get('/', roleMiddleware('admin'), userController.getAllUsers);
+router.get('/', authMiddleware, roleMiddleware(['admin']), userController.getAllUsers);
+router.put('/:id', authMiddleware, roleMiddleware(['admin']), userController.updateUser);
+router.delete('/:id', authMiddleware, roleMiddleware(['admin']), userController.deleteUser);
 
-// Mettre à jour un utilisateur
-router.put('/:id', roleMiddleware('admin'), userController.updateUser);
 
 router.get('/me', authenticateToken, userController.getUserDetails);
 
