@@ -1,23 +1,20 @@
+// productRoutes.js
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const authenticateToken = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
 // Récupérer tous les produits
-router.get('/', productController.getAllProducts);
+router.get('/', authenticateToken, productController.getAllProducts);
 
-// Ajouter un produit
-router.post('/', roleMiddleware('admin'), productController.addProduct);
+// Ajouter un produit (accès réservé aux administrateurs)
+router.post('/', authenticateToken, roleMiddleware('admin'), productController.addProduct);
 
-// Mettre à jour un produit
-router.put('/:id', roleMiddleware('admin'), productController.updateProduct);
+// Mettre à jour un produit (accès réservé aux administrateurs)
+router.put('/:id', authenticateToken, roleMiddleware('admin'), productController.updateProduct);
 
-// Supprimer un produit
-router.delete('/:id', roleMiddleware('admin'), productController.deleteProduct);
-
-router.get('/category/:categoryId', productController.getProductsByCategory);
-
-router.get('/:id', productController.getProductById);
-
+// Supprimer un produit (accès réservé aux administrateurs)
+router.delete('/:id', authenticateToken, roleMiddleware('admin'), productController.deleteProduct);
 
 module.exports = router;
