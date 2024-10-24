@@ -17,21 +17,28 @@ exports.getAllUsers = (req, res) => {
 };
 
 // Mettre à jour les informations d'un utilisateur
-exports.updateUser = (req, res) => {
-  const userId = req.params.id;
-  const { username, email, role } = req.body;
+exports.updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { role } = req.body;
 
-  const query = 'UPDATE users SET username = ?, email = ?, role = ? WHERE id = ?';
-  db.query(query, [username, email, role, userId], (err, result) => {
-    if (err) {
-      console.error('Erreur lors de la mise à jour de l\'utilisateur :', err);
-      return res.status(500).send('Erreur interne lors de la mise à jour de l\'utilisateur.');
+    // Vérifiez si le rôle est fourni et est une valeur valide
+    if (!role || !['user', 'admin'].includes(role)) {
+      return res.status(400).send('Rôle invalide.');
     }
+
+    // Mettre à jour l'utilisateur
+    const [result] = await db.promise().query('UPDATE users SET role = ? WHERE id = ?', [role, userId]);
+    
     if (result.affectedRows === 0) {
       return res.status(404).send('Utilisateur non trouvé.');
     }
+
     res.status(200).send('Utilisateur mis à jour avec succès.');
-  });
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour de l'utilisateur :", err);
+    res.status(500).send('Erreur interne lors de la mise à jour de l\'utilisateur.');
+  }
 };
 
 // Supprimer un utilisateur
