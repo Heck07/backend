@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const categoryController = require('../controllers/categoryController');
+const authenticateToken = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
+const categoryController = require('../controllers/categoryController')
 
-// Récupérer toutes les catégories
-router.get('/', categoryController.getAllCategories);
 
-// Ajouter une catégorie
-router.post('/', roleMiddleware('admin'), categoryController.addCategory);
+// Récupérer toutes les catégories (accessible uniquement aux utilisateurs authentifiés)
+router.get('/', authenticateToken, categoryController.getAllCategories);
 
-// Mettre à jour une catégorie
-router.put('/:id', roleMiddleware('admin'), categoryController.updateCategory);
+// Ajouter une catégorie (accessible uniquement aux administrateurs)
+router.post('/', authenticateToken, roleMiddleware('admin'), categoryController.addCategory);
 
-// Supprimer une catégorie
-router.delete('/:id', roleMiddleware('admin'), categoryController.deleteCategory);
+// Mettre à jour une catégorie (accessible uniquement aux administrateurs)
+router.put('/:id', authenticateToken, roleMiddleware('admin'), categoryController.updateCategory);
+
+// Supprimer une catégorie (accessible uniquement aux administrateurs)
+router.delete('/:id', authenticateToken, roleMiddleware('admin'), categoryController.deleteCategory);
 
 module.exports = router;
