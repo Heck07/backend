@@ -17,7 +17,7 @@ exports.createRole = (req, res) => {
   const { role_name } = req.body;
   
   if (!role_name) {
-    return res.status(400).send('Le nom du rôle est requis.');
+    return res.status(400).send('Le nom du rôle est requis');
   }
 
   const query = 'INSERT INTO roles (role_name) VALUES (?)';
