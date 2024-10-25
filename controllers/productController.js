@@ -1,6 +1,22 @@
 // productController.js
 const db = require('../config/database');
 
+exports.getProductById = (req, res) => {
+  const productId = req.params.id;
+
+  const query = 'SELECT * FROM products WHERE id = ?';
+  db.query(query, [productId], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération du produit :', err);
+      return res.status(500).send('Erreur interne lors de la récupération du produit.');
+    }
+    if (results.length === 0) {
+      return res.status(404).send('Produit non trouvé.');
+    }
+    res.status(200).json(results[0]); // Envoie le premier résultat, puisque l'ID est unique
+  });
+};
+
 // Récupérer tous les produits
 exports.getAllProducts = (req, res) => {
   const query = 'SELECT * FROM products';

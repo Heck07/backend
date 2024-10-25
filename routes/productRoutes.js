@@ -5,6 +5,8 @@ const productController = require('../controllers/productController');
 const authenticateToken = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
+router.get('/:id', productController.getProductById);
+
 // Récupérer tous les produits
 router.get('/', productController.getAllProducts);
 
