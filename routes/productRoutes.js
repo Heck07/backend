@@ -6,7 +6,7 @@ const authenticateToken = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
 
 // Récupérer tous les produits
-router.get('/', authenticateToken, productController.getAllProducts);
+router.get('/', productController.getAllProducts);
 
 // Ajouter un produit (accès réservé aux administrateurs)
 router.post('/', authenticateToken, roleMiddleware('admin'), productController.addProduct);
