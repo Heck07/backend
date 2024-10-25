@@ -37,7 +37,7 @@ exports.updatePurchase = (req, res) => {
   const { quantity, totalAmount } = req.body;
 
   if (!quantity || !totalAmount) {
-    return res.status(400).send('Tous les champs sont requis pour la mise à jour.');
+    return res.status(400).send('Tous les champs sont requis pour la mise à jour');
   }
 
   const query = 'UPDATE purchased SET quantity = ?, total_amount = ? WHERE id = ?';
