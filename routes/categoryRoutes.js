@@ -6,7 +6,7 @@ const categoryController = require('../controllers/categoryController')
 
 
 // Récupérer toutes les catégories (accessible uniquement aux utilisateurs authentifiés)
-router.get('/', authenticateToken, categoryController.getAllCategories);
+router.get('/', categoryController.getAllCategories);
 
 // Ajouter une catégorie (accessible uniquement aux administrateurs)
 router.post('/', authenticateToken, roleMiddleware('admin'), categoryController.addCategory);
